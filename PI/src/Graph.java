@@ -22,6 +22,6 @@ public class Graph {
 			}
 		}
 		//if we arrive this point, it means that the K first nodes are colored with differents colors
-		while
+		//while
 	}
 }
