@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 public class Graph {
 	int number; // reference of the graph
-	int n; // number of nodes - K
+	int n; // number of nodes
 	int K;
 	LinkedList<Integer>[] edges;
 	int[] hint;
@@ -20,8 +20,8 @@ public class Graph {
 				}
 			}
 		}
-		for (int i=0; i< n -this.K;i++){
-			int c=colors[i+K];
+		for (int i=this.K; i< n;i++){
+			int c=colors[i];
 			for (int j : edges[i]){
 				if (colors[j]==c) return false;
 			}
