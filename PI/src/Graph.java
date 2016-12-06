@@ -1,6 +1,4 @@
 import java.util.LinkedList;
-import java.util.ListIterator;
-
 public class Graph {
 	int number; // reference of the graph
 	int n; // number of nodes - K
@@ -23,10 +21,9 @@ public class Graph {
 			}
 		}
 		for (int i=0; i< n -this.K;i++){
-			ListIterator li = edges[i].listIterator();
 			int c=colors[i+K];
-			while (li.hasNext()){
-				if (colors[li.next()]==c) return false;
+			for (int j : edges[i]){
+				if (colors[j]==c) return false;
 			}
 			
 		}
