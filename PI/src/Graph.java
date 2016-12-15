@@ -4,8 +4,8 @@ public class Graph {
 	int n; // number of nodes
 	int K;
 	LinkedList<Integer>[] edges;
-	int[] hint;
-	public void Graph(int number, int n, int K, LinkedList<Integer>[] edges, int[] hint){
+	LinkedList<Integer> hint;
+	public void Graph(int number, int n, int K, LinkedList<Integer>[] edges, LinkedList<Integer> hint){
 		this.number=number;
 		this.n=n;
 		this.K=K;
@@ -28,5 +28,9 @@ public class Graph {
 			
 		}
 	return true;
+	}
+	
+	public String toString(){
+		return "Graph "+this.number+", "+this.n+" nodes, "+this.K+" colored nodes, "+this.hint.size()/2+" hints";
 	}
 }
