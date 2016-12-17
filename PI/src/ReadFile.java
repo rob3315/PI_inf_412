@@ -25,8 +25,8 @@ public class ReadFile {
 		}
 
 		String[] G = graphs.split(":");
-		// for(int i=0; i<G.length; i++)
-		// System.out.println(G[i]);
+		for(int i=0; i<G.length; i++)
+		 System.out.println(G[i]);
 
 		int n = G.length;
 		LinkedList<Graph> graphes = new LinkedList<Graph>();
@@ -42,6 +42,8 @@ public class ReadFile {
 		while (i < n) {
 			// for (int i = 0; i < n; i++) {
 			if (G[i].length() > 0) {
+				//note pour Lorraine : il n'y avait pas de else donc si la condition ci-dessus n'etait pas verifie, on a une boucle infinie
+				// conseil pour la prochaine fois : la boucle for!!!
 				if (G[i].charAt(0) == 'G') {
 					String[] number = G[i].split(" ");
 					// System.out.println(number[1]);
@@ -63,7 +65,7 @@ public class ReadFile {
 						}
 						node += nodes[0]+ ":";
 						voisins += nodes[1] + ":";
-						if (G[i + 1].charAt(0) == 'G'){
+						if (G[i + 1].charAt(0) == 'G'){// lorraine : tu ne peut pas faire ca, c'est dangereux car si tu le fait en derniere iteration tu sort du tableau
 							voisins += "=";
 							node+="=";
 						}
@@ -73,7 +75,7 @@ public class ReadFile {
 															// ["1<-->2","0<-->3"]
 						hints+=marqueur+"/";
 						for (int j = 0; j < hint.length; j++) {
-							String[] h = hint[j].split("<-->");
+							String[] h = hint[j].split("<->");// lorraine : tu as mis "<-->" d'ou l'erreur
 							hints += h[0] +":"+ h[1]+":";
 						}
 						hints += "=";
@@ -82,6 +84,7 @@ public class ReadFile {
 					}
 				}
 			}
+			else i++;
 		}
 		String[] number=numbers.split(":");
 		String[] K=Ks.split(":");

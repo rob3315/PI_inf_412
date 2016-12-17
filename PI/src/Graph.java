@@ -1,11 +1,20 @@
 import java.util.LinkedList;
 public class Graph {
 	int number; // reference of the graph
-	int n; // number of nodes
+	int n; // number of nodes ie last number which appear in the graph description
 	int K;
 	LinkedList<Integer>[] edges;
-	LinkedList<Integer> hint;
-	public void Graph(int number, int n, int K, LinkedList<Integer>[] edges, LinkedList<Integer> hint){
+	LinkedList<Integer[]> hint;//a hint is an array of 2 elements
+
+	public Graph(){
+		//used in Readfile
+	}
+	public Graph(int number){
+		//used in Readfile2
+		this.number=number;
+		this.hint = new LinkedList<Integer[]>();
+	}
+	public Graph(int number, int n, int K, LinkedList<Integer>[] edges, LinkedList<Integer[]> hint){
 		this.number=number;
 		this.n=n;
 		this.K=K;
