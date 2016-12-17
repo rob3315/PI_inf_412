@@ -14,7 +14,6 @@ public class ReadFile2 {
 			while ((ligne = br.readLine()) != null) {
 				lines.add(ligne);
 			}
-
 			br.close();
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -34,7 +33,6 @@ public class ReadFile2 {
 						for (LinkedList<Integer> e:lst_edges){
 							current.edges[e.pop()]=(LinkedList) e.clone() ;
 						}
-						
 					}
 					//we add a new graph and we initialize current
 					String[] number = l.split(" ");
@@ -75,7 +73,7 @@ public class ReadFile2 {
 			}
 		}
 		// we finish the last graph
-		current.n=nb_node+1;
+		current.n=java.lang.Math.max(nb_node+1,current.K+1);
 		current.edges=new LinkedList[current.n];
 		for (LinkedList<Integer> e:lst_edges){
 			current.edges[e.pop()]=e;
