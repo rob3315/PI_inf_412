@@ -5,8 +5,8 @@ import java.util.LinkedList;
 public class color {
 
 	public static void main(String[] args) {
-		String graphPath="datasetA.txt";
-		String colorPath="datasetA_color.txt";
+		String graphPath="datasetB.txt";
+		String colorPath="datasetB_color.txt";
 		LinkedList<Graph> l = ReadFile2.datasetReader(graphPath);
 		File fichier =new File(colorPath);
 		try {
@@ -16,6 +16,7 @@ public class color {
             try {
             	for (Graph g:l){
             		writer.write(print_tab(g, naive_greedy_algorithm(g)));
+            		System.out.println(g.number);
             	}
             }
             finally {
@@ -51,9 +52,18 @@ public class color {
 			}
 			unavailable_color.sort(null);
 			int c=0;
+			int last=-1;
+			boolean flag=true;
 			if (unavailable_color!=null){
-				while (unavailable_color.isEmpty()==false && c==unavailable_color.pop()){
-					c++;// we are looking for the first color we could use
+				while (unavailable_color.isEmpty()==false && flag){
+					int d=unavailable_color.pop();
+					if (d==last+1){
+						last+=1;
+						c++;
+					}
+					else if (d!=last){
+						flag=false;
+					}
 				}
 			}
 			color[i]=c;

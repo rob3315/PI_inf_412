@@ -25,6 +25,8 @@ public class Graph {
 		for (int i=0;i<this.K;i++){
 			for (int j=i+1;j<this.K;j++){
 				if (colors[i]==colors[j]){
+					//System.out.println(i); //for debug purpose
+					//System.out.println(j);
 					return false;
 				}
 			}
@@ -33,7 +35,11 @@ public class Graph {
 			int c=colors[i];
 			if (this.edges[i]!=null){
 				for (int j : this.edges[i]){
-					if (colors[j]==c) return false;
+					if (colors[j]==c) {
+						//System.out.println(i); //for debug purpose
+						//System.out.println(j);
+						return false;
+					}
 				}
 			}
 			
@@ -44,7 +50,11 @@ public class Graph {
 	public int number_hint(int[] colors){
 		int res=0;
 		for (Integer[] h : this.hint){
-			if (colors[h[0]]==colors[1]){
+			//System.out.println(h[0]); for debug purpose
+			//System.out.println(h[1]);
+			//System.out.println(colors.length);
+			//System.out.println(this.number);
+			if (colors[h[0]]==colors[h[1]]){
 				res+=1;
 			}
 		}
