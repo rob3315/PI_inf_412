@@ -10,10 +10,18 @@ public class valid_coloring {
 		int valid=0;
 		int not_valid=0;
 		int missing=0;
+		int hint=0;
 		for (Graph g :l){
 			if (colorHash.containsKey(g.number)){
 				if (g.isvalid_coloring(colorHash.get(g.number))){
-					System.out.println(String.format("Graph %d: valid", g.number));
+					int h= g.number_hint(colorHash.get(g.number));
+					if (h>1){
+						System.out.println(String.format("Graph %d: valid (%d hints satisfied)", g.number,h));
+					}
+					else{
+						System.out.println(String.format("Graph %d: valid (%d hint satisfied)", g.number,h));
+					}
+					hint+=h;
 					valid+=1;
 				}
 				else{
@@ -30,6 +38,7 @@ public class valid_coloring {
 		System.out.println(String.format("	NO_VALID = %d",valid));
 		System.out.println(String.format("	NO_NOT_VALID = %d",not_valid));
 		System.out.println(String.format("	NO_MISSING = %d",missing));
+		System.out.println(String.format("	NO_HINTS_SATISFIED = %d",hint));
 		return;
 	}
 }

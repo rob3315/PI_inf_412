@@ -40,7 +40,16 @@ public class Graph {
 		}
 	return true;
 	}
-	
+
+	public int number_hint(int[] colors){
+		int res=0;
+		for (Integer[] h : this.hint){
+			if (colors[h[0]]==colors[1]){
+				res+=1;
+			}
+		}
+		return res;
+	}
 	public String toString(){
 		return "Graph "+this.number+", "+this.n+" nodes, "+this.K+" colored nodes, "+this.hint.size()/2+" hints";
 	}
