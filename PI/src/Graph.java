@@ -21,18 +21,20 @@ public class Graph {
 		this.edges=edges;
 		this.hint=hint;
 	}
-	private boolean isvalid_coloring(int[] colors){
-		for (int i=0;i<K;i++){
-			for (int j=i+1;j<K;j++){
+	public boolean isvalid_coloring(int[] colors){
+		for (int i=0;i<this.K;i++){
+			for (int j=i+1;j<this.K;j++){
 				if (colors[i]==colors[j]){
 					return false;
 				}
 			}
 		}
-		for (int i=this.K; i< n;i++){
+		for (int i=this.K; i< this.n;i++){
 			int c=colors[i];
-			for (int j : edges[i]){
-				if (colors[j]==c) return false;
+			if (this.edges[i]!=null){
+				for (int j : this.edges[i]){
+					if (colors[j]==c) return false;
+				}
 			}
 			
 		}

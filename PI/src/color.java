@@ -1,19 +1,37 @@
+import java.io.File;
+import java.io.FileWriter;
 import java.util.LinkedList;
 
 public class color {
 
 	public static void main(String[] args) {
 		String graphPath="datasetA.txt";
+		String colorPath="datasetA_color.txt";
 		LinkedList<Graph> l = ReadFile2.datasetReader(graphPath);
-		l.pop();// for the 2nd graph
-		int[] color=naive_greedy_algorithm(l.peek());
-		System.out.println(print_tab(l.peek(), color));
+		File fichier =new File(colorPath);
+		try {
+            // creation of the file
+            fichier.createNewFile();
+            FileWriter writer = new FileWriter(fichier);
+            try {
+            	for (Graph g:l){
+            		writer.write(print_tab(g, naive_greedy_algorithm(g)));
+            	}
+            }
+            finally {
+                writer.close();
+            }
+        } catch (Exception e) {
+            System.out.println("fail to create the file");
+            System.out.println(e);
+        }
+		
 
 	}
 	private static String print_tab(Graph g, int[] color){
-		String res=String.format("Graph %d:\\n",g.number);
+		String res=String.format("Graph %d:\n",g.number);
 		for (int i=0;i<color.length;i++){
-			res+=String.format("%d -c> %d\\n",i,color[i]);
+			res+=String.format("%d -c> %d\n",i,color[i]);
 		}
 		return res;
 	}
