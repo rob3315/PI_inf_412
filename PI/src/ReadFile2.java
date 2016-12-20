@@ -67,6 +67,7 @@ public class ReadFile2 {
 							String[] h = k.split("<->");
 							Integer[] ti={Integer.parseInt(h[0]),Integer.parseInt(h[1])};
 							current.hint.push(ti);
+						nb_node=Math.max(nb_node,Math.max(ti[1], ti[0]));//line add because of graph 25 of datasetB
 						}
 					}
 				}
@@ -80,6 +81,7 @@ public class ReadFile2 {
 		}
 		return graphes;
 		}
+
 	public static Hashtable<Integer,int[]> colorReader(String fichier) {
 		LinkedList<String> lines= new LinkedList<String>();//for the storage of all the line
 
