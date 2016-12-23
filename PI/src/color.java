@@ -5,8 +5,8 @@ import java.util.LinkedList;
 public class color {
 
 	public static void main(String[] args) {
-		String graphPath="datasetB.txt";
-		String colorPath="datasetB_color.txt";
+		String graphPath="datasetA.txt";
+		String colorPath="datasetA_color.txt";
 		LinkedList<Graph> l = ReadFile2.datasetReader(graphPath);
 		File fichier =new File(colorPath);
 		try {

@@ -66,7 +66,7 @@ public class ReadFile2 {
 						for (String k : hint) {
 							String[] h = k.split("<->");
 							Integer[] ti={Integer.parseInt(h[0]),Integer.parseInt(h[1])};
-							current.hint.push(ti);
+							current.hint.add(ti);
 						nb_node=Math.max(nb_node,Math.max(ti[1], ti[0]));//line add because of graph 25 of datasetB
 						}
 					}
@@ -98,7 +98,7 @@ public class ReadFile2 {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		Hashtable graph_coloring= new Hashtable<Integer,int[]>();//hashtable, the key is the number of the Graph and the content is the array of color
+		Hashtable<Integer,int[]> graph_coloring= new Hashtable<Integer,int[]>();//hashtable, the key is the number of the Graph and the content is the array of color
 		int n = -1;// the number of the graph
 		int nb_vertice=0;// number of vertices of current graph as far as I know
 		LinkedList<Integer> lst_edges=null; //list of the color of the vertices

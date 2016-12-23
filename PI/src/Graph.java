@@ -1,10 +1,12 @@
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 public class Graph {
 	int number; // reference of the graph
 	int n; // number of nodes ie last number which appear in the graph description
 	int K;
-	LinkedList<Integer>[] edges;
-	LinkedList<Integer[]> hint;//a hint is an array of 2 elements
+	List<Integer>[] edges;
+	Collection<Integer[]> hint;//a hint is an array of 2 elements
 
 	public Graph(){
 		//used in Readfile
