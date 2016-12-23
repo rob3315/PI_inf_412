@@ -33,7 +33,7 @@ public class ReadFile2 {
 					String[] number = l.split(" ");
 					current =new Graph(Integer.parseInt(number[1].replaceAll("\\W","")));
 					graphes.add(current);
-					current.edges= new HashMap<Integer,LinkedList<Integer>>();
+					current.edges= new HashMap<Integer, List<Integer>>();
 				}
 				else if (l.charAt(0) == 'K') {
 					//we set K value
