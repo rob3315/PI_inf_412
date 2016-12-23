@@ -1,11 +1,12 @@
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 public class Graph {
 	int number; // reference of the graph
 	int n; // number of nodes ie last number which appear in the graph description
 	int K;
-	List<Integer>[] edges;
+	Map<Integer, LinkedList<Integer>> edges;
 	Collection<Integer[]> hint;//a hint is an array of 2 elements
 
 	public Graph(){
@@ -16,7 +17,7 @@ public class Graph {
 		this.number=number;
 		this.hint = new LinkedList<Integer[]>();
 	}
-	public Graph(int number, int n, int K, LinkedList<Integer>[] edges, LinkedList<Integer[]> hint){
+	public Graph(int number, int n, int K, Map<Integer, LinkedList<Integer>> edges, LinkedList<Integer[]> hint){
 		this.number=number;
 		this.n=n;
 		this.K=K;
@@ -35,8 +36,8 @@ public class Graph {
 		}
 		for (int i=this.K; i< this.n;i++){
 			int c=colors[i];
-			if (this.edges[i]!=null){
-				for (int j : this.edges[i]){
+			if (this.edges.containsKey(i)){
+				for (int j : this.edges.get(i)){
 					if (colors[j]==c) {
 						//System.out.println(i); //for debug purpose
 						//System.out.println(j);

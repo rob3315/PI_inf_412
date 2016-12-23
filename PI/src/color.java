@@ -42,9 +42,9 @@ public class color {
 		for (int i = 0; i<  g.K;i++){color[i]=i;}// we deal with the first K elements
 		for (int i=g.K;i<g.n;i++){
 			LinkedList<Integer> unavailable_color= new LinkedList<Integer>();
-			if (g.edges[i]!=null){
+			if (g.edges.containsKey(i)){
 				//if i has neighbors
-				for (int v : g.edges[i]){
+				for (int v : g.edges.get(i)){
 					if (color[v]!=-1){
 						unavailable_color.add(color[v]);
 					}
