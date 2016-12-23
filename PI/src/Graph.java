@@ -1,4 +1,5 @@
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,7 @@ public class Graph {
 	int K;
 	Map<Integer, LinkedList<Integer>> edges;
 	Collection<Integer[]> hint;//a hint is an array of 2 elements
-
+	Map<Integer, LinkedList<Integer>> hint_map;
 	public Graph(){
 		//used in Readfile
 	}
@@ -28,8 +29,8 @@ public class Graph {
 		for (int i=0;i<this.K;i++){
 			for (int j=i+1;j<this.K;j++){
 				if (colors[i]==colors[j]){
-					//System.out.println(i); //for debug purpose
-					//System.out.println(j);
+					System.out.println(i); //for debug purpose
+					System.out.println(j);
 					return false;
 				}
 			}
@@ -39,8 +40,8 @@ public class Graph {
 			if (this.edges.containsKey(i)){
 				for (int j : this.edges.get(i)){
 					if (colors[j]==c) {
-						//System.out.println(i); //for debug purpose
-						//System.out.println(j);
+						System.out.println(i); //for debug purpose
+						System.out.println(j);
 						return false;
 					}
 				}
@@ -65,5 +66,18 @@ public class Graph {
 	}
 	public String toString(){
 		return "Graph "+this.number+", "+this.n+" nodes, "+this.K+" colored nodes, "+this.hint.size()/2+" hints";
+	}
+	public void create_hint_map(){
+		this.hint_map= new HashMap<Integer,LinkedList<Integer>>();
+		for (Integer[] tab : this.hint){
+			if (this.hint_map.containsKey(tab[0])==false){
+				this.hint_map.put(tab[0], new LinkedList<Integer>());
+			}
+			if (this.hint_map.containsKey(tab[1])==false){
+				this.hint_map.put(tab[1], new LinkedList<Integer>());
+			}
+			this.hint_map.get(tab[0]).push(tab[1]);
+			this.hint_map.get(tab[1]).push(tab[0]);
+		}
 	}
 }

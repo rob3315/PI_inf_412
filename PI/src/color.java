@@ -1,12 +1,13 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 public class color {
 
 	public static void main(String[] args) {
-		String graphPath="datasetA.txt";
-		String colorPath="datasetA_color.txt";
+		String graphPath="datasetB.txt";
+		String colorPath="datasetB_color.txt";
 		LinkedList<Graph> l = ReadFile2.datasetReader(graphPath);
 		File fichier =new File(colorPath);
 		try {
@@ -15,7 +16,8 @@ public class color {
             FileWriter writer = new FileWriter(fichier);
             try {
             	for (Graph g:l){
-            		writer.write(print_tab(g, naive_greedy_algorithm(g)));
+            		//writer.write(print_tab(g, naive_greedy_algorithm(g)));
+            		writer.write(print_tab(g, naive_greedy_algorithm_with_max_hint(g)));
             		System.out.println(g.number);
             	}
             }
@@ -57,6 +59,50 @@ public class color {
 			if (unavailable_color!=null){
 				while (unavailable_color.isEmpty()==false && flag){
 					int d=unavailable_color.pop();
+					if (d==last+1){
+						last+=1;
+						c++;
+					}
+					else if (d!=last){
+						flag=false;
+					}
+				}
+			}
+			color[i]=c;
+		}
+		return color;
+	}
+	private static int[] naive_greedy_algorithm_with_max_hint(Graph g){
+		int[] color = new int[g.n];
+		for (int i=0;i<g.n;i++){color[i]=-1;}//we initialize the array
+		g.create_hint_map();
+		for (int i = 0; i<  g.K;i++){color[i]=i;}// we deal with the first K elements
+		for (int i=g.K;i<g.n;i++){
+			PriorityQueue<Integer> unavailable_color= new PriorityQueue<Integer>();
+			if (g.edges.containsKey(i)){
+				//if i has neighbors
+				for (int v : g.edges.get(i)){
+					if (color[v]!=-1){
+						unavailable_color.add(color[v]);
+					}
+				}
+			}
+			int c=0;
+			boolean flag=true;
+			// We try the hint first
+			if (g.hint_map.containsKey(i)){
+				for (Integer h :g.hint_map.get(i)){
+					if (color[h]!=-1 && unavailable_color.contains(color[h])==false){
+						c=color[h];
+						flag=false;
+					}
+				}
+			}
+			// else we find the first we can
+			int last=-1;
+			if (unavailable_color!=null  && flag){
+				while (unavailable_color.isEmpty()==false && flag){
+					int d=unavailable_color.poll();
 					if (d==last+1){
 						last+=1;
 						c++;
