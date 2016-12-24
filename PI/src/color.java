@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
@@ -18,7 +20,8 @@ public class color {
             try {
             	for (Graph g:l){
             		//writer.write(print_tab(g, naive_greedy_algorithm(g)));
-            		writer.write(print_tab(g, naive_greedy_algorithm_with_max_hint(g)));
+            		//writer.write(print_tab(g, naive_greedy_algorithm_with_max_hint(g)));
+            		writer.write(print_tab(g, Dsatur_with_max_hint(g)));
             		System.out.println(g.number);
             	}
             }
@@ -78,7 +81,12 @@ public class color {
 		for (int i=0;i<g.n;i++){color[i]=-1;}//we initialize the array
 		g.create_hint_map();
 		for (int i = 0; i<  g.K;i++){color[i]=i;}// we deal with the first K elements
-		for (Integer i : g.edges.keySet()){
+		//old version
+		//Collection<Integer> lst_key=g.edges.keySet();
+		//new version
+		Collection<Integer> lst_key= new TreeSet<Integer>(new edgeComparator(g));
+		lst_key.addAll(g.edges.keySet());
+		for (Integer i : lst_key){
 			Collection<Integer> unavailable_color= new TreeSet<Integer>();
 			if (g.edges.containsKey(i)){
 				//if i has neighbors which should always be the case
@@ -112,5 +120,51 @@ public class color {
 		}
 		return color;
 	}
+	private static int[] Dsatur_with_max_hint(Graph g){
+		int[] color = new int[g.n];
+		int[] nb_colored_neightbors= new int[g.n];
+		for (int i=0;i<g.n;i++){color[i]=-1;}//we initialize the array
+		g.create_hint_map();
+		for (int i = 0; i<  g.K;i++){color[i]=i; nb_colored_neightbors[i]=g.K;}// we deal with the first K elements
 
+		Comparator<Integer> comp = new DsaturComparator(g, nb_colored_neightbors);
+		Collection<Integer> lst_key= new TreeSet<Integer>();
+		lst_key.addAll(g.edges.keySet());
+		while (lst_key.isEmpty()==false){
+			int i =Collections.min(lst_key,comp);
+			lst_key.remove(i);
+			Collection<Integer> unavailable_color= new TreeSet<Integer>();
+			if (g.edges.containsKey(i)){
+				//if i has neighbors which should always be the case
+				for (int v : g.edges.get(i)){
+					nb_colored_neightbors[v]+=1;
+					if (color[v]!=-1){
+						unavailable_color.add(color[v]);
+					}
+				}
+			}
+			int c=0;
+			boolean flag=true;
+			// We try the hint first
+			if (g.hint_map.containsKey(i)){
+				for (Integer h :g.hint_map.get(i)){
+					if (color[h]!=-1 && unavailable_color.contains(color[h])==false){
+						c=color[h];
+						flag=false;
+					}
+				}
+			}
+			// else we find the first we can
+			while (unavailable_color!=null  && flag){
+				if (unavailable_color.contains(c)){
+					c++;
+				}
+				else{
+					flag=false;
+				}
+			}
+			color[i]=c;
+		}
+		return color;
+	}
 }

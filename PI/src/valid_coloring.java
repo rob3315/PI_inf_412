@@ -31,6 +31,7 @@ public class valid_coloring {
 				else{
 					System.out.println(String.format("Graph %d: not valid", g.number));
 					not_valid+=1;
+					return;
 				}
 			}
 			else{
