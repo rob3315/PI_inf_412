@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 public class Graph {
 	int number; // reference of the graph
 	int n; // number of nodes ie last number which appear in the graph description
@@ -78,6 +79,23 @@ public class Graph {
 			}
 			this.hint_map.get(tab[0]).add(tab[1]);
 			this.hint_map.get(tab[1]).add(tab[0]);
+		}
+	}
+	public void check_edges(){
+		//comme le graphe fournit est hautement merdique, on vérifie que les données sont a peu pres cohérentes
+		LinkedList<Integer> s= new LinkedList<Integer>();
+		s.addAll(this.edges.keySet());
+		for (Integer e :s){
+			for (Integer i : this.edges.get(e)){
+				if (i>=this.K){
+					if (this.edges.containsKey(i)==false){
+						this.edges.put(i, new LinkedList<Integer>());
+					}
+					if (this.edges.get(i).contains(e)==false){
+						this.edges.get(i).add(e);
+					}
+				}
+			}
 		}
 	}
 }

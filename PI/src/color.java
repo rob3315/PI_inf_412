@@ -84,7 +84,7 @@ public class color {
 		//old version
 		//Collection<Integer> lst_key=g.edges.keySet();
 		//new version
-		Collection<Integer> lst_key= new TreeSet<Integer>(new edgeComparator(g));
+		Collection<Integer> lst_key= new TreeSet<Integer>(new EdgeComparator(g));
 		lst_key.addAll(g.edges.keySet());
 		for (Integer i : lst_key){
 			Collection<Integer> unavailable_color= new TreeSet<Integer>();
