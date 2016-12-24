@@ -1,12 +1,13 @@
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class color2 {
 	public static void main(String[] args) {
 		String graphPath="datasetB.txt";
 		String colorPath="datasetB_color.txt";
-		LinkedList<Graph> l = ReadFile2.datasetReader(graphPath);
+		Collection<Graph> l = ReadFile2.datasetReader(graphPath);
 //		for (Graph g : l){ to check DegreeOf
 //			System.out.println("Graph "+g.number);
 //			DegreeOf(g);
@@ -20,7 +21,7 @@ public class color2 {
             try {
             	for (Graph g:l){
             		writer.write(printcoloring(g,welsh_powell_coloring(g,DegreeOf(g)))); 
-            		//System.out.println(g.number);
+            		System.out.println(g.number);
             	}
             }
             finally {
@@ -30,13 +31,14 @@ public class color2 {
             System.out.println("fail to create the file");
             System.out.println(e);
         }
+		System.out.println("end");
 	}
 	
 	public static int[] DegreeOf(Graph g){
 		int[] Degree=new int[g.n];
 		for (int i=0; i<g.n; i++){
-			if (g.edges[i]!=null)
-				Degree[i]=g.edges[i].size();
+			if (g.edges.containsKey(i))
+				Degree[i]=g.edges.get(i).size();
 			else
 				Degree[i]=0;
 		}
@@ -82,7 +84,7 @@ public class color2 {
 		}
 			
 		while (compt<g.n){
-			if (g.edges[vertex]==null && vertex>g.K){
+			if (g.edges.containsKey(vertex) && vertex>g.K){
 				color2[vertex]=0;
 				Decreasing[v]=-1;
 				compt++;
@@ -106,8 +108,8 @@ public class color2 {
 				if (Decreasing[j]!=-1 && Decreasing[j]>g.K){
 					boolean flag=true;
 					for (int co : colored){ //pb on stocke toutes les couleurs mais on affecte ensuite au vertex que la couleur c du dernier graph
-						if ( g.edges[co]!=null){
-							if (g.edges[co].contains(Decreasing[j]) && color2[co]==k)// pb qd vertex<K, ce n'est pas le c actuel qu'on affecte mais color2[vertex]
+						if ( g.edges.containsKey(co)){
+							if (g.edges.get(co).contains(Decreasing[j]) && color2[co]==k)// pb qd vertex<K, ce n'est pas le c actuel qu'on affecte mais color2[vertex]
 								flag=false;
 						}
 					}

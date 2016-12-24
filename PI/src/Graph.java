@@ -7,9 +7,9 @@ public class Graph {
 	int number; // reference of the graph
 	int n; // number of nodes ie last number which appear in the graph description
 	int K;
-	Map<Integer, List<Integer>> edges;
+	Map<Integer, Collection<Integer>> edges;
 	Collection<Integer[]> hint;//a hint is an array of 2 elements
-	Map<Integer, List<Integer>> hint_map;
+	Map<Integer, Collection<Integer>> hint_map;
 	public Graph(){
 		//used in Readfile
 	}
@@ -18,7 +18,7 @@ public class Graph {
 		this.number=number;
 		this.hint = new LinkedList<Integer[]>();
 	}
-	public Graph(int number, int n, int K, Map<Integer, List<Integer>> edges, List<Integer[]> hint){
+	public Graph(int number, int n, int K, Map<Integer, Collection<Integer>> edges, Collection<Integer[]> hint){
 		this.number=number;
 		this.n=n;
 		this.K=K;
@@ -68,7 +68,7 @@ public class Graph {
 		return "Graph "+this.number+", "+this.n+" nodes, "+this.K+" colored nodes, "+this.hint.size()/2+" hints";
 	}
 	public void create_hint_map(){
-		this.hint_map= new HashMap<Integer,List<Integer>>();
+		this.hint_map= new HashMap<Integer,Collection<Integer>>();
 		for (Integer[] tab : this.hint){
 			if (this.hint_map.containsKey(tab[0])==false){
 				this.hint_map.put(tab[0], new LinkedList<Integer>());

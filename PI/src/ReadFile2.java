@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class ReadFile2 {
-	public static LinkedList<Graph> datasetReader(String fichier) {
-		LinkedList<String> lines= new LinkedList<String>();//for the storage of all the line
+	public static Collection<Graph> datasetReader(String fichier) {
+		List<String> lines= new LinkedList<String>();//for the storage of all the line
 
 		// lecture du fichier texte
 		try {
@@ -33,7 +33,7 @@ public class ReadFile2 {
 					String[] number = l.split(" ");
 					current =new Graph(Integer.parseInt(number[1].replaceAll("\\W","")));
 					graphes.add(current);
-					current.edges= new HashMap<Integer, List<Integer>>();
+					current.edges= new HashMap<Integer, Collection<Integer>>();
 				}
 				else if (l.charAt(0) == 'K') {
 					//we set K value
@@ -71,7 +71,7 @@ public class ReadFile2 {
 		return graphes;
 		}
 
-	public static Hashtable<Integer,int[]> colorReader(String fichier) {
+	public static Map<Integer,int[]> colorReader(String fichier) {
 		LinkedList<String> lines= new LinkedList<String>();//for the storage of all the line
 
 		// lecture du fichier texte
@@ -87,7 +87,9 @@ public class ReadFile2 {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		Hashtable<Integer,int[]> graph_coloring= new Hashtable<Integer,int[]>();//hashtable, the key is the number of the Graph and the content is the array of color
+		
+		Map<Integer,int[]> graph_coloring= new Hashtable<Integer,int[]>();//hashtable, the key is the number of the Graph and the content is the array of color
+		
 		int n = -1;// the number of the graph
 		int nb_vertice=0;// number of vertices of current graph as far as I know
 		LinkedList<Integer> lst_edges=null; //list of the color of the vertices

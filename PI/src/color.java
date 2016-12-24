@@ -1,14 +1,15 @@
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
+import java.util.TreeSet;
 
 public class color {
 
 	public static void main(String[] args) {
 		String graphPath="datasetB.txt";
 		String colorPath="datasetB_color.txt";
-		LinkedList<Graph> l = ReadFile2.datasetReader(graphPath);
+		Collection<Graph> l = ReadFile2.datasetReader(graphPath);
 		File fichier =new File(colorPath);
 		try {
             // creation of the file
@@ -77,10 +78,10 @@ public class color {
 		for (int i=0;i<g.n;i++){color[i]=-1;}//we initialize the array
 		g.create_hint_map();
 		for (int i = 0; i<  g.K;i++){color[i]=i;}// we deal with the first K elements
-		for (int i=g.K;i<g.n;i++){
-			PriorityQueue<Integer> unavailable_color= new PriorityQueue<Integer>();
+		for (Integer i : g.edges.keySet()){
+			Collection<Integer> unavailable_color= new TreeSet<Integer>();
 			if (g.edges.containsKey(i)){
-				//if i has neighbors
+				//if i has neighbors which should always be the case
 				for (int v : g.edges.get(i)){
 					if (color[v]!=-1){
 						unavailable_color.add(color[v]);
@@ -99,17 +100,12 @@ public class color {
 				}
 			}
 			// else we find the first we can
-			int last=-1;
-			if (unavailable_color!=null  && flag){
-				while (unavailable_color.isEmpty()==false && flag){
-					int d=unavailable_color.poll();
-					if (d==last+1){
-						last+=1;
-						c++;
-					}
-					else if (d!=last){
-						flag=false;
-					}
+			while (unavailable_color!=null  && flag){
+				if (unavailable_color.contains(c)){
+					c++;
+				}
+				else{
+					flag=false;
 				}
 			}
 			color[i]=c;
