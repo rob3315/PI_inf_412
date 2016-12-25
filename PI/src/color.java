@@ -3,7 +3,9 @@ import java.io.FileWriter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeSet;
 
 public class color {
@@ -11,7 +13,7 @@ public class color {
 	public static void main(String[] args) {
 		String graphPath="datasetB.txt";
 		String colorPath="datasetB_color.txt";
-		Collection<Graph> l = ReadFile2.datasetReader(graphPath);
+		Collection<Graph> l = ReadFile.datasetReader(graphPath);
 		File fichier =new File(colorPath);
 		try {
             // creation of the file
@@ -20,8 +22,9 @@ public class color {
             try {
             	for (Graph g:l){
             		//writer.write(print_tab(g, naive_greedy_algorithm(g)));
-            		//writer.write(print_tab(g, naive_greedy_algorithm_with_max_hint(g)));
-            		writer.write(print_tab(g, Dsatur_with_max_hint(g)));
+            		//writer.write(print_tab(g, greedy_algorithm_with_max_hint(g)));
+            		//writer.write(print_tab(g, Dsatur_with_max_hint(g)));
+            		writer.write(print_tab(g, welsh_powell_coloring(g)));
             		System.out.println(g.number);
             	}
             }
@@ -41,6 +44,50 @@ public class color {
 			res+=String.format("%d -c> %d\n",i,color[i]);
 		}
 		return res;
+	}
+	private static List<Integer> DegreeOf(Graph g){
+		List<Integer> DescDeg=new LinkedList<Integer>();
+		for(int i=g.K;i<g.n;i++){ DescDeg.add(i);}
+		Comparator<Integer> comp=new EdgeComparator(g);
+		Collections.sort(DescDeg,comp);
+		return DescDeg;
+		// return the vertices in decreasing order of degree
+		
+	}
+	
+	private static int[] welsh_powell_coloring(Graph g){
+		g.check_edges();// parce que le fichier fourni c'est de la merde
+		List<Integer> Decreasing= DegreeOf(g);
+		int[] color= new int[g.n];
+		for (int i=0; i<g.n; i++){color[i]=-1;}
+		for (int i=0; i<g.K; i++){
+			color[i]=i;
+		}
+		Iterator<Integer> iter;
+		int c=0;
+		while (Decreasing.isEmpty()==false){
+			iter=Decreasing.iterator();
+			Collection<Integer> same_co=new TreeSet<Integer>();//the vertices colored with c
+			if (c<g.K){same_co.add(c);}
+			while (iter.hasNext()){
+				int current=iter.next();
+				boolean coloriable=true;
+				if (g.edges.containsKey(current)){
+					for (int s : g.edges.get(current)){
+						if (same_co.contains(s)){
+							coloriable=false;
+						}
+					}
+				}
+				if (coloriable){
+					color[current]=c;
+					same_co.add(current);
+					iter.remove();
+				}
+			}
+			c++;
+		}
+		return color;
 	}
 	private static int[] naive_greedy_algorithm(Graph g){
 		int[] color = new int[g.n];
@@ -76,7 +123,7 @@ public class color {
 		}
 		return color;
 	}
-	private static int[] naive_greedy_algorithm_with_max_hint(Graph g){
+	private static int[] greedy_algorithm_with_max_hint(Graph g){
 		int[] color = new int[g.n];
 		for (int i=0;i<g.n;i++){color[i]=-1;}//we initialize the array
 		g.create_hint_map();

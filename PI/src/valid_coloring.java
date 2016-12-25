@@ -5,9 +5,9 @@ public class valid_coloring {
 	public static void main(String[] args) {
 		String datasetPath="datasetB.txt";
 		String colorPath="datasetB_color.txt";
-		Collection<Graph> l = ReadFile2.datasetReader(datasetPath);
+		Collection<Graph> l = ReadFile.datasetReader(datasetPath);
 		System.out.println("dataset read");
-		Map<Integer,int[]> colorHash=ReadFile2.colorReader(colorPath);
+		Map<Integer,int[]> colorHash=ReadFile.colorReader(colorPath);
 		System.out.println("color read");
 		int valid=0;
 		int not_valid=0;

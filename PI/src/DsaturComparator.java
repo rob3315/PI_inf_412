@@ -19,7 +19,9 @@ public class DsaturComparator implements Comparator<Integer> {
 			return 1;
 		}
 		else{
-			return g.edges.get(o1).size() > g.edges.get(o2).size() ? -1 : 1;
+			if (g.edges.get(o1).size() > g.edges.get(o2).size()){return -1;}
+			else if (g.edges.get(o1).size() < g.edges.get(o2).size()){return 1;}
+			else return 0;
 		}
 	}
 

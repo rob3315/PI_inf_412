@@ -2,11 +2,74 @@ import java.io.*;
 import java.util.*;
 
 public class ReadFile {
-	public static void main (String[] args){
-		datasetReader("datasetA.txt");
+	public static Collection<Graph> datasetReader(String fichier) {
+		LinkedList<Graph> graphes = new LinkedList<Graph>();
+		// lecture du fichier texte
+		try {
+			InputStream ips = new FileInputStream(fichier);
+			InputStreamReader ipsr = new InputStreamReader(ips);
+			BufferedReader br = new BufferedReader(ipsr);
+			String l;
+
+			Graph current = null;
+			int nb_node=0;// number of node of current graph as far as I know
+			while ((l = br.readLine()) != null) {
+
+				if (l.replaceAll("\\s","").length() > 0) {
+					//if the line is not empty
+					if (l.charAt(0) == 'G') {
+						if (current!=null){
+							// we finish the precedent graph
+							current.n=nb_node+1;
+						}
+						//we add a new graph and we initialize current
+						String[] number = l.split(" ");
+						current =new Graph(Integer.parseInt(number[1].replaceAll("\\W","")));
+						graphes.add(current);
+						current.edges= new HashMap<Integer, Collection<Integer>>();
+					}
+					else if (l.charAt(0) == 'K') {
+						//we set K value
+						String[] K = l.split("=");
+						nb_node=Integer.parseInt(K[1])-1;
+						current.K=nb_node+1;
+					}
+					else {
+						String[] nodes = l.split("-->");
+						if (nodes.length == 2){
+							//we are dealing with edges
+							nb_node=Integer.parseInt(nodes[0].replaceAll("\\W",""));//we complete current
+							current.edges.put(nb_node, new LinkedList<Integer>());
+							for (String k : nodes[1].split(" ")){
+								if (k.equals("")==false){
+									current.edges.get(nb_node).add(Integer.parseInt(k.replaceAll("\\s","")));
+								}
+							}
+						}
+						else {
+							//we are dealing with hints
+							String[] hint = l.split(" ");
+							for (String k : hint) {
+								String[] h = k.split("<->");
+								Integer[] ti={Integer.parseInt(h[0]),Integer.parseInt(h[1])};
+								current.hint.add(ti);
+							nb_node=Math.max(nb_node,Math.max(ti[1], ti[0]));//line add because of graph 25 of datasetB
+							}
+						}
+					}
+				}
+			}
+			br.close();
+			// we finish the last graph
+			current.n=nb_node+1;
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return graphes;
 	}
-	public static LinkedList<Graph> datasetReader(String fichier) {
-		String graphs = "";
+
+	public static Map<Integer,int[]> colorReader(String fichier) {
+		LinkedList<String> lines= new LinkedList<String>();//for the storage of all the line
 
 		// lecture du fichier texte
 		try {
@@ -14,124 +77,51 @@ public class ReadFile {
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
 			String ligne;
-			// int i=-1;
 			while ((ligne = br.readLine()) != null) {
-				graphs += ligne + ":";
+				lines.add(ligne);
 			}
-
 			br.close();
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-
-		String[] G = graphs.split(":");
-		for(int i=0; i<G.length; i++)
-		 System.out.println(G[i]);
-
-		int n = G.length;
-		LinkedList<Graph> graphes = new LinkedList<Graph>();
-		String numbers = "";
-		String Ks = "";
-		String ns = "";
-		String node = ""; // pour Graph2 : "2/0:1:2:3="
-		String voisins = "";// pour Graph2 : "2/1 2:0 3:0 3:1 2=" = marque la fin
-		// pour le graph
-		String hints = "";// pour Graph2 "2/1:2:0:3="
-		int i = 0;
-		int marqueur=0;
-		while (i < n) {
-			// for (int i = 0; i < n; i++) {
-			if (G[i].length() > 0) {
-				//note pour Lorraine : il n'y avait pas de else donc si la condition ci-dessus n'etait pas verifie, on a une boucle infinie
-				// conseil pour la prochaine fois : la boucle for!!!
-				if (G[i].charAt(0) == 'G') {
-					String[] number = G[i].split(" ");
-					// System.out.println(number[1]);
-					numbers += number[1] + ":";
-					marqueur=Integer.parseInt(number[1]);
-					i++;
-				} else if (G[i].charAt(0) == 'K') {
-					String[] K = G[i].split("=");
-					// System.out.println(number[1]);
-					Ks += K[1] + ":";
-					i++;
-				} else {
-					String[] nodes = G[i].split("-->");
-					// System.out.println(nodes[0]);
-					if (nodes.length == 2) {
-						if (G[i-1].charAt(0)=='G'){
-							node+=marqueur+"/";
-							voisins+=marqueur+"/";
+		
+		Map<Integer,int[]> graph_coloring= new Hashtable<Integer,int[]>();//hashtable, the key is the number of the Graph and the content is the array of color
+		
+		int n = -1;// the number of the graph
+		int nb_vertice=0;// number of vertices of current graph as far as I know
+		LinkedList<Integer> lst_edges=null; //list of the color of the vertices
+		for (String l : lines){
+			if (l.replaceAll("\\s","").length() > 0) {
+				//if the line is not empty
+				if (l.charAt(0) == 'G') {
+					if (lst_edges!=null){
+						// we finish the precedent graph
+						int[] color=new int[nb_vertice];
+						for ( int i=0;i<nb_vertice;i++){
+							color[i]=lst_edges.pop();
 						}
-						node += nodes[0]+ ":";
-						voisins += nodes[1] + ":";
-						if (G[i + 1].charAt(0) == 'G'){// lorraine : tu ne peut pas faire ca, c'est dangereux car si tu le fait en derniere iteration tu sort du tableau
-							voisins += "=";
-							node+="=";
-						}
-						i++;
-					} else {
-						String[] hint = G[i].split(" "); // Graph2
-															// ["1<-->2","0<-->3"]
-						hints+=marqueur+"/";
-						for (int j = 0; j < hint.length; j++) {
-							String[] h = hint[j].split("<->");// lorraine : tu as mis "<-->" d'ou l'erreur
-							hints += h[0] +":"+ h[1]+":";
-						}
-						hints += "=";
-						i++;
-
+						graph_coloring.put(n, (int[]) color.clone());
 					}
+					//we initialise a new list for the color of the new graph
+					String[] number = l.split(" ");
+					n =Integer.parseInt(number[1].replaceAll("\\W",""));
+					lst_edges= new LinkedList<Integer>();
+					nb_vertice=0;
+				}
+				else {
+				//we add a color
+					String[] h = l.split("-c>");
+					lst_edges.add(Integer.parseInt(h[1].replaceAll("\\s", "")));
+					nb_vertice+=1;
 				}
 			}
-			else i++;
 		}
-		String[] number=numbers.split(":");
-		String[] K=Ks.split(":");
-		String[] Vertices=node.split("=");//"2/0:1:2:3","3/..
-		String[] Adjacency=voisins.split("=");
-		String[] hin=hints.split("=");
-		String[] noeuds=new String[number.length+1]; // case num i pour les noeuds du graphe i
-		String[] adjacents=new String[number.length+1];
-		String[] HINT=new String[number.length+1];
-		for (int l=0;l<Vertices.length; l++){
-			String[] N=Vertices[l].split("/");
-			noeuds[Integer.parseInt(N[0])]=N[1];	
+		// we finish the last graph
+		int[] color=new int[nb_vertice];
+		for ( int i=0;i<nb_vertice;i++){
+			color[i]=lst_edges.pop();
 		}
-		for (int l=0;l<Adjacency.length; l++){
-			String[] N=Adjacency[l].split("/");
-			adjacents[Integer.parseInt(N[0])]=N[1];	
+		graph_coloring.put(n, (int[]) color.clone());
+		return graph_coloring;
 		}
-		for (int l=0;l<hin.length; l++){
-			String[] N=hin[l].split("/");
-			HINT[Integer.parseInt(N[0])]=N[1];	
-		}
-		
-		
-		
-		for (int k=0; k<number.length; k++){
-			Graph g=new Graph();
-			g.number=Integer.parseInt(number[k]);
-			g.K=Integer.parseInt(K[k]);
-			String[] nod=noeuds[k].split(":");
-			g.n=Math.max(g.K,Integer.parseInt(nod[nod.length-1]));// valeur du dernier noeud = le plus grand
-			LinkedList<Integer>[] edges = new LinkedList[g.n];
-			String[] adj=adjacents[k].split(":");
-			for(int l=0;l<nod.length; l++){
-				edges[Integer.parseInt(nod[l])]=new LinkedList<Integer>();
-				String[] finaladj=adj[l].split(" ");
-				for ( String a : finaladj)
-					edges[Integer.parseInt(nod[l])].add(Integer.parseInt(a));
-			}
-			g.edges=edges;
-			String[] H=HINT[k].split(":");
-			LinkedList<Integer> hint=new LinkedList<Integer>();
-			for(int l=0;l<H.length; l++){
-				hint.add(Integer.parseInt(H[l]));
-			}
-			g.hint=hint;
-		}
-		return graphes;
-		}
-
 }
