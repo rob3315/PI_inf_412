@@ -3,7 +3,7 @@ import java.util.*;
 
 public class ReadFile {
 	public static Collection<Graph> datasetReader(String fichier) {
-		LinkedList<Graph> graphes = new LinkedList<Graph>();
+		Collection<Graph> graphes = new LinkedList<Graph>();
 		// lecture du fichier texte
 		try {
 			InputStream ips = new FileInputStream(fichier);
@@ -69,59 +69,50 @@ public class ReadFile {
 	}
 
 	public static Map<Integer,int[]> colorReader(String fichier) {
-		LinkedList<String> lines= new LinkedList<String>();//for the storage of all the line
-
+		Map<Integer,int[]> graph_coloring= new Hashtable<Integer,int[]>();//hashtable, the key is the number of the Graph and the content is the array of color
 		// lecture du fichier texte
 		try {
 			InputStream ips = new FileInputStream(fichier);
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
-			String ligne;
-			while ((ligne = br.readLine()) != null) {
-				lines.add(ligne);
-			}
-			br.close();
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		
-		Map<Integer,int[]> graph_coloring= new Hashtable<Integer,int[]>();//hashtable, the key is the number of the Graph and the content is the array of color
-		
-		int n = -1;// the number of the graph
-		int nb_vertice=0;// number of vertices of current graph as far as I know
-		LinkedList<Integer> lst_edges=null; //list of the color of the vertices
-		for (String l : lines){
-			if (l.replaceAll("\\s","").length() > 0) {
-				//if the line is not empty
-				if (l.charAt(0) == 'G') {
-					if (lst_edges!=null){
-						// we finish the precedent graph
-						int[] color=new int[nb_vertice];
-						for ( int i=0;i<nb_vertice;i++){
-							color[i]=lst_edges.pop();
+
+			int n = -1;// the number of the graph
+			int nb_vertice=0;// number of vertices of current graph as far as I know
+			LinkedList<Integer> lst_edges=null; //list of the color of the vertices
+			String l;
+			while ((l = br.readLine()) != null) {
+				if (l.replaceAll("\\s","").length() > 0) {
+					//if the line is not empty
+					if (l.charAt(0) == 'G') {
+						if (lst_edges!=null){
+							// we finish the precedent graph
+							int[] color=new int[nb_vertice];
+							for ( int i=0;i<nb_vertice;i++){
+								color[i]=lst_edges.pop();
+							}
+							graph_coloring.put(n, (int[]) color.clone());
 						}
-						graph_coloring.put(n, (int[]) color.clone());
+						//we initialise a new list for the color of the new graph
+						String[] number = l.split(" ");
+						n =Integer.parseInt(number[1].replaceAll("\\W",""));
+						lst_edges= new LinkedList<Integer>();
+						nb_vertice=0;
 					}
-					//we initialise a new list for the color of the new graph
-					String[] number = l.split(" ");
-					n =Integer.parseInt(number[1].replaceAll("\\W",""));
-					lst_edges= new LinkedList<Integer>();
-					nb_vertice=0;
-				}
-				else {
-				//we add a color
-					String[] h = l.split("-c>");
-					lst_edges.add(Integer.parseInt(h[1].replaceAll("\\s", "")));
-					nb_vertice+=1;
+					else {
+					//we add a color
+						String[] h = l.split("-c>");
+						lst_edges.add(Integer.parseInt(h[1].replaceAll("\\s", "")));
+						nb_vertice+=1;
+					}
 				}
 			}
+			// we finish the last graph
+			int[] color=new int[nb_vertice];
+			for ( int i=0;i<nb_vertice;i++){color[i]=lst_edges.pop();}
+			graph_coloring.put(n, (int[]) color.clone());
+			br.close();
 		}
-		// we finish the last graph
-		int[] color=new int[nb_vertice];
-		for ( int i=0;i<nb_vertice;i++){
-			color[i]=lst_edges.pop();
-		}
-		graph_coloring.put(n, (int[]) color.clone());
+		catch (Exception e) {System.out.println(e.toString());}
 		return graph_coloring;
-		}
+	}
 }
