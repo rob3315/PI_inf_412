@@ -3,10 +3,18 @@ import java.util.Map;
 
 public class valid_coloring {
 	public static void main(String[] args) {
-		String datasetPath="datasetB.txt";
-		String colorPath="datasetB_color.txt";
+		String datasetPath;
+		String colorPath;
+		if (args.length!=2){
+			System.out.println("please give exactly two arguments");
+			return;
+		}
+		else{
+			datasetPath=args[0];
+			colorPath=args[1];
+		}
 		Collection<Graph> l = ReadFile.datasetReader(datasetPath);
-		System.out.println("dataset read");
+		//System.out.println("dataset read");
 		Map<Integer,int[]> colorHash=ReadFile.colorReader(colorPath);
 		System.out.println("color read");
 		int valid=0;
@@ -17,7 +25,7 @@ public class valid_coloring {
 		for (Graph g :l){
 			if (colorHash.containsKey(g.number)){
 				if (g.isvalid_coloring(colorHash.get(g.number))){
-					int h= g.number_hint(colorHash.get(g.number));
+					int h= g.number_hint_satisfied(colorHash.get(g.number));
 					if (h>1){
 						System.out.println(String.format("Graph %d: valid (%d hints satisfied)", g.number,h));
 					}
@@ -44,7 +52,7 @@ public class valid_coloring {
 		System.out.println(String.format("	NO_NOT_VALID = %d",not_valid));
 		System.out.println(String.format("	NO_MISSING = %d",missing));
 		System.out.println(String.format("	NO_HINTS_SATISFIED = %d",hint));
-		System.out.println(String.format("	NO_COLORS_USED = %d",color));
+		//System.out.println(String.format("	NO_COLORS_USED = %d",color));
 		return;
 	}
 	private static int get_max(int[] tab){

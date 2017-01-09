@@ -11,11 +11,8 @@ public class Graph {
 	Map<Integer, Collection<Integer>> edges;
 	Collection<Integer[]> hint;//a hint is an array of 2 elements
 	Map<Integer, Collection<Integer>> hint_map;
-	public Graph(){
-		//used in Readfile
-	}
 	public Graph(int number){
-		//used in Readfile2
+		//used in Readfile
 		this.number=number;
 		this.hint = new LinkedList<Integer[]>();
 	}
@@ -30,8 +27,8 @@ public class Graph {
 		for (int i=0;i<this.K;i++){
 			for (int j=i+1;j<this.K;j++){
 				if (colors[i]==colors[j]){
-					System.out.println(i); //for debug purpose
-					System.out.println(j);
+					//System.out.println(i); //for debug purpose
+					//System.out.println(j);
 					return false;
 				}
 			}
@@ -41,8 +38,8 @@ public class Graph {
 			if (this.edges.containsKey(i)){
 				for (int j : this.edges.get(i)){
 					if (colors[j]==c) {
-						System.out.println(i); //for debug purpose
-						System.out.println(j);
+						//System.out.println(i); //for debug purpose
+						//System.out.println(j);
 						return false;
 					}
 				}
@@ -52,7 +49,7 @@ public class Graph {
 	return true;
 	}
 
-	public int number_hint(int[] colors){
+	public int number_hint_satisfied(int[] colors){
 		int res=0;
 		for (Integer[] h : this.hint){
 			//System.out.println(h[0]); for debug purpose
@@ -65,8 +62,9 @@ public class Graph {
 		}
 		return res;
 	}
+	@Override
 	public String toString(){
-		return "Graph "+this.number+", "+this.n+" nodes, "+this.K+" colored nodes, "+this.hint.size()/2+" hints";
+		return "Graph "+this.number+", "+this.n+" nodes, "+this.K+" colored nodes, "+this.hint.size()+" hints";
 	}
 	public void create_hint_map(){
 		this.hint_map= new HashMap<Integer,Collection<Integer>>();
@@ -82,7 +80,6 @@ public class Graph {
 		}
 	}
 	public void check_edges(){
-		//comme le graphe fournit est hautement merdique, on vérifie que les données sont a peu pres cohérentes
 		LinkedList<Integer> s= new LinkedList<Integer>();
 		s.addAll(this.edges.keySet());
 		for (Integer e :s){

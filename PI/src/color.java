@@ -11,8 +11,16 @@ import java.util.TreeSet;
 public class color {
 
 	public static void main(String[] args) {
-		String graphPath="datasetB.txt";
-		String colorPath="datasetB_color.txt";
+		String graphPath;
+		String colorPath;
+		if (args.length!=1){
+			System.out.println("please give only one argument");
+			return;
+		}
+		else { 
+			graphPath=args[0];
+			colorPath=args[0].substring(0, args[0].length()-4)+"_color.txt";
+		}
 		Collection<Graph> l = ReadFile.datasetReader(graphPath);
 		File fichier =new File(colorPath);
 		try {
@@ -22,10 +30,10 @@ public class color {
             try {
             	for (Graph g:l){
             		//writer.write(print_tab(g, naive_greedy_algorithm(g)));
-            		//writer.write(print_tab(g, greedy_algorithm_with_max_hint(g)));
-            		//writer.write(print_tab(g, Dsatur_with_max_hint(g)));
-            		writer.write(print_tab(g, welsh_powell_coloring(g)));
-            		System.out.println(g.number);
+            		//writer.write(print_tab(g, max_degree_algorithm(g)));
+            		writer.write(print_tab(g, Dsatur(g)));
+            		//writer.write(print_tab(g, welsh_powell_coloring(g)));
+            		//System.out.println(g.number);
             	}
             }
             finally {
@@ -56,7 +64,7 @@ public class color {
 	}
 	
 	private static int[] welsh_powell_coloring(Graph g){
-		g.check_edges();// parce que le fichier fourni c'est de la merde
+		g.check_edges();
 		List<Integer> Decreasing= DegreeOf(g);
 		int[] color= new int[g.n];
 		for (int i=0; i<g.n; i++){color[i]=-1;}
@@ -123,9 +131,10 @@ public class color {
 		}
 		return color;
 	}
-	private static int[] greedy_algorithm_with_max_hint(Graph g){
+	private static int[] max_degree_algorithm(Graph g){
 		int[] color = new int[g.n];
 		for (int i=0;i<g.n;i++){color[i]=-1;}//we initialize the array
+		g.check_edges();
 		g.create_hint_map();
 		for (int i = 0; i<  g.K;i++){color[i]=i;}// we deal with the first K elements
 		//old version
@@ -165,13 +174,19 @@ public class color {
 			}
 			color[i]=c;
 		}
+		for(int i=0;i<g.n;i++){
+			if (color[i]==-1){
+				color[i]=0;
+			}
+		}
 		return color;
 	}
-	private static int[] Dsatur_with_max_hint(Graph g){
+	private static int[] Dsatur(Graph g){
 		int[] color = new int[g.n];
 		int[] nb_colored_neightbors= new int[g.n];
 		for (int i=0;i<g.n;i++){color[i]=-1;}//we initialize the array
 		g.create_hint_map();
+		g.check_edges();
 		for (int i = 0; i<  g.K;i++){color[i]=i; nb_colored_neightbors[i]=g.K;}// we deal with the first K elements
 
 		Comparator<Integer> comp = new DsaturComparator(g, nb_colored_neightbors);
@@ -211,6 +226,11 @@ public class color {
 				}
 			}
 			color[i]=c;
+		}
+		for(int i=0;i<g.n;i++){
+			if (color[i]==-1){
+				color[i]=0;
+			}
 		}
 		return color;
 	}

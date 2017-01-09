@@ -14,7 +14,7 @@ public class EdgeComparator implements Comparator<Integer>{
 			if (g.edges.containsKey(o2)){
 				if (g.edges.get(o1).size() > g.edges.get(o2).size()){return -1;}
 				else if (g.edges.get(o1).size() < g.edges.get(o2).size()){return 1;}
-				else{return 0;}
+				else{return o1.compareTo(o2);}
 			}
 			else {return -1;}
 		}
@@ -23,7 +23,7 @@ public class EdgeComparator implements Comparator<Integer>{
 				return 1;
 			}
 			else{
-				return 0;
+				return o1.compareTo(o2);
 			}
 		}
 		
