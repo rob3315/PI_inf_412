@@ -52,7 +52,7 @@ public class valid_coloring {
 		System.out.println(String.format("	NO_NOT_VALID = %d",not_valid));
 		System.out.println(String.format("	NO_MISSING = %d",missing));
 		System.out.println(String.format("	NO_HINTS_SATISFIED = %d",hint));
-		//System.out.println(String.format("	NO_COLORS_USED = %d",color));
+		System.out.println(String.format("	NO_COLORS_USED = %d",color));
 		return;
 	}
 	private static int get_max(int[] tab){

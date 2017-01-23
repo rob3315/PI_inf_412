@@ -65,6 +65,7 @@ public class ReadFile {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
+		System.out.println("dataset read");
 		return graphes;
 	}
 
@@ -113,6 +114,7 @@ public class ReadFile {
 			br.close();
 		}
 		catch (Exception e) {System.out.println(e.toString());}
+		System.out.println("colorset read");
 		return graph_coloring;
 	}
 }

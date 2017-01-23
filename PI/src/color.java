@@ -43,7 +43,7 @@ public class color {
             System.out.println("fail to create the file");
             System.out.println(e);
         }
-		
+		System.out.println("done");
 
 	}
 	private static String print_tab(Graph g, int[] color){

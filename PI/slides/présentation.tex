@@ -1,0 +1,64 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}   
+\usepackage{algorithm,algpseudocode}
+\usepackage{color}
+
+
+\usepackage{beamerx}
+
+\title[Graph Coloring]{INF421 Project}
+\author{Lorraine ROULIER \\ R\'emi ROBIN}
+
+
+\begin{document}
+  \maketitle
+ \begin{frame}{DSATUR}{Introduction}
+      \begin{block}{Main Idea}<1->
+        Greedy algorithm :\\
+        the harder it is to color a vertex, the quicker it should be done
+      \end{block}
+
+      \begin{block}{DSATUR}<2->
+        the more colored neighbors a vertex has, the harder it is to color.
+      \end{block}
+\end{frame}
+ \begin{frame}{Peudo-Code}{Introduction}
+ \begin{algorithm}[H]
+    \caption{DSATUR}
+    \begin{algorithmic}
+        \Procedure{DSATUR}{}\newline
+    \While{some vertices are uncolored}
+        \State find the vertex with the most colored neighbors \Comment{$O(n)$}
+        \State visit the neighbors and store the unavailable colors\Comment{$O(D \log D)$}
+        \If{a hint can be satisfied} \Comment{$O(\textcolor{red}{H* \log D})$}   		\State do it	\Else   		\State find the smallest available color \Comment{$O(D \log D)$}
+        \EndIf
+        \State update the comparator \Comment{$O(D)$}
+        \EndWhile
+        \EndProcedure
+    \end{algorithmic}
+    \label{alg_1}
+\end{algorithm}
+ \end{frame}
+ \begin{frame}{Other algorithms implemented}{Introduction}
+      \begin{block}{Naive algorithm}<1->
+        no order
+      \end{block}
+      \begin{block}{Max-degree}<2->
+        the more neighbors a vertex has, the harder it is to color.
+      \end{block}
+\end{frame}
+ \begin{frame}{Welsh-Powell algorithm}{Introduction}
+      \begin{block}{Welsh-Powell}<1->
+        ranking vertices by degree\\
+        try to color every vertex you can with the current color
+      \end{block}
+\end{frame}
+ \begin{frame}{Welsh-Powell algorithm}{Introduction}
+      \begin{block}{Welsh-Powell}<1->
+        ranking vertices by degree\\
+        try to color every vertex you can with the current color
+      \end{block}
+\end{frame}
+\end{document}
